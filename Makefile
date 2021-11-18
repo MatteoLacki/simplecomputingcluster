@@ -1,15 +1,20 @@
-PROJECT_NAME = simplecomputingcluster
+VE=ve_scc
+PIP=$(VE)/bin/pip
+PYTHON=$(VE)/bin/python
+
+apt_install:
+	sudo apt update
+	sudo apt install reddis
+	sudo apt install reddis-cli
 install:
-	virtualenv ve_simplecomputingcluster
-	ve_simplecomputingcluster/bin/pip install IPython
-	ve_simplecomputingcluster/bin/pip install -e .
-upload_test_pypi:
-	rm -rf dist || True
-	python setup.py sdist
-	twine -r testpypi dist/* 
-upload_pypi:
-	rm -rf dist || True
-	python setup.py sdist
-	twine upload dist/*
+	virtualenv $(VE)
+	$(PIP) install IPython
+	$(PIP) install -e .
+clean:
+	rm -rf $(VE)
+worker:
+	$(PYTHON) bin/worker.py
+flask:
+	$(PYTHON) bin/wsgi.py --debug
 py:
-	ve_simplecomputingcluster/bin/ipython
+	$(PYTHON) -m IPython
